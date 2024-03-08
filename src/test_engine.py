@@ -22,7 +22,7 @@ class TestExecuteStoryboardComplex(unittest.TestCase):
         final_state_a, _ = execute_storyboard(story_state, snippet_branch, get_input=get_input_mock, send_output=send_output_mock)
 
         # Correcting the assertion to match the expected structure
-        self.assertTrue(any("Choose path: A or B?" in output for _, output in final_state_a[0][0]))
+        self.assertTrue(any("Choose path: A or B?" in output for output in final_state_a[0]['texts']))
         send_output_mock.assert_any_call("Path A chosen")
 
     def test_story_accumulates_state_across_snippets(self):

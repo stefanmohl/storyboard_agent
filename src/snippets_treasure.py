@@ -45,8 +45,8 @@ def snippet0(story_state):
 
 def find_snippet(test_snippet, story_state):
     locations = [i for i, snippet_list in enumerate(story_state)
-        for snippet in snippet_list[0]
-        if snippet[0] == test_snippet ]
+        for snippet in snippet_list['functions']
+        if snippet == test_snippet ]
     return locations
 
 def snippet8(story_state):
