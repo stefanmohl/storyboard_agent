@@ -28,7 +28,7 @@ def execute_storyboard(story_context, current_snippet, get_input=get_user_input,
         elif next_action == 'end':
             current_record['result'] = None
             story_context.append(current_record)
-            return story_context, None
+            return story_context
         else:
             current_snippet = next_action
 
