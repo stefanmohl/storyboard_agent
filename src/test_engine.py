@@ -19,7 +19,7 @@ class TestExecuteStoryboardComplex(unittest.TestCase):
         send_output_mock = MagicMock()
 
         story_state = []
-        final_state_a, _ = execute_storyboard(story_state, snippet_branch, get_input=get_input_mock, send_output=send_output_mock)
+        final_state_a = execute_storyboard(story_state, snippet_branch, get_input=get_input_mock, send_output=send_output_mock)
 
         # Correcting the assertion to match the expected structure
         self.assertTrue(any("Choose path: A or B?" in output for output in final_state_a[0]['texts']))
@@ -37,7 +37,7 @@ class TestExecuteStoryboardComplex(unittest.TestCase):
         send_output_mock = MagicMock()
 
         story_state = []
-        final_state, _ = execute_storyboard(story_state, snippet_accumulate, get_input=get_input_mock, send_output=send_output_mock)
+        final_state = execute_storyboard(story_state, snippet_accumulate, get_input=get_input_mock, send_output=send_output_mock)
         
         # Correcting the assertion to accurately check for "Accumulated" in story_state
         # Since "Accumulated" is appended directly to story_state, we check the list directly
@@ -57,7 +57,7 @@ class TestExecuteStoryboardComplex(unittest.TestCase):
         send_output_mock = MagicMock()
 
         story_state = []
-        final_state, _ = execute_storyboard(story_state, snippet_repeat, get_input=get_input_mock, send_output=send_output_mock)
+        final_state = execute_storyboard(story_state, snippet_repeat, get_input=get_input_mock, send_output=send_output_mock)
         
         expected_calls = [call("Repeat on invalid. Valid: yes"), call("Repeat on invalid. Valid: yes"), call("Valid input received")]
         send_output_mock.assert_has_calls(expected_calls)
@@ -74,7 +74,7 @@ class TestExecuteStoryboardComplex(unittest.TestCase):
         send_output_mock = MagicMock()
 
         story_state = []
-        final_state, _ = execute_storyboard(story_state, snippet_handle_empty_input, get_input=get_input_mock, send_output=send_output_mock)
+        final_state = execute_storyboard(story_state, snippet_handle_empty_input, get_input=get_input_mock, send_output=send_output_mock)
 
         # Expect the snippet to be repeated until valid input ('continue') is received
         expected_calls = [call("Say 'continue' to proceed.") for _ in range(3)] + [call("Successfully continued.")]
@@ -98,7 +98,7 @@ class TestExecuteStoryboardComplex(unittest.TestCase):
         send_output_mock = MagicMock()
 
         story_state = []
-        final_state, _ = execute_storyboard(story_state, snippet_multiple_decisions, get_input=get_input_mock, send_output=send_output_mock)
+        final_state = execute_storyboard(story_state, snippet_multiple_decisions, get_input=get_input_mock, send_output=send_output_mock)
 
         # Verify the correct path through the story based on the inputs
         expected_calls = [call("First decision: 'left' or 'right'?"), call("Second decision: 'up' or 'down'?"), call("You've made it!")]
@@ -112,7 +112,7 @@ class TestExecuteStoryboardComplex(unittest.TestCase):
         send_output_mock = MagicMock()
 
         story_state = []
-        final_state, _ = execute_storyboard(story_state, snippet_end_immediately, get_input=lambda: 'unused', send_output=send_output_mock)
+        final_state = execute_storyboard(story_state, snippet_end_immediately, get_input=lambda: 'unused', send_output=send_output_mock)
 
         # Verify that the story ends immediately with the correct output
         send_output_mock.assert_called_once_with("The end.")
@@ -129,7 +129,7 @@ class TestExecuteStoryboardComplex(unittest.TestCase):
         send_output_mock = MagicMock()
 
         story_state = []
-        final_state, _ = execute_storyboard(story_state, snippet_retry_on_incorrect, get_input=get_input_mock, send_output=send_output_mock)
+        final_state = execute_storyboard(story_state, snippet_retry_on_incorrect, get_input=get_input_mock, send_output=send_output_mock)
 
         # Verify the snippet is repeated until the correct input is received
         expected_calls = [call("Correct answer is 'yes'.") for _ in range(3)] + [call("Correct answer received.")]
@@ -151,7 +151,7 @@ class TestExecuteStoryboardComplex(unittest.TestCase):
         send_output_mock_a = MagicMock()
 
         story_state_a = []
-        final_state_a, _ = execute_storyboard(story_state_a, snippet_dynamic_decision, get_input=get_input_mock_a, send_output=send_output_mock_a)
+        final_state_a = execute_storyboard(story_state_a, snippet_dynamic_decision, get_input=get_input_mock_a, send_output=send_output_mock_a)
 
         send_output_mock_a.assert_has_calls([call("Choose 'A' or 'B':"), call("Option A chosen.")])
 
@@ -160,7 +160,7 @@ class TestExecuteStoryboardComplex(unittest.TestCase):
         send_output_mock_b = MagicMock()
 
         story_state_b = []
-        final_state_b, _ = execute_storyboard(story_state_b, snippet_dynamic_decision, get_input=get_input_mock_b, send_output=send_output_mock_b)
+        final_state_b = execute_storyboard(story_state_b, snippet_dynamic_decision, get_input=get_input_mock_b, send_output=send_output_mock_b)
 
         send_output_mock_b.assert_has_calls([call("Choose 'A' or 'B':"), call("Option B chosen.")])
 
@@ -173,7 +173,7 @@ class TestExecuteStoryboardComplex(unittest.TestCase):
         send_output_mock = MagicMock()
 
         story_state = []
-        final_state, _ = execute_storyboard(story_state, snippet_end_no_output, get_input=lambda: 'unused', send_output=send_output_mock)
+        final_state = execute_storyboard(story_state, snippet_end_no_output, get_input=lambda: 'unused', send_output=send_output_mock)
 
         # Verify that the story ends without any output
         send_output_mock.assert_called_once_with("")
@@ -190,7 +190,7 @@ class TestExecuteStoryboardComplex(unittest.TestCase):
         send_output_mock = MagicMock()
 
         story_state = []
-        final_state, _ = execute_storyboard(story_state, snippet_loop_start, get_input=get_input_mock, send_output=send_output_mock)
+        final_state = execute_storyboard(story_state, snippet_loop_start, get_input=get_input_mock, send_output=send_output_mock)
 
         # Verify the story loops correctly and ends based on user input
         expected_loop_calls = [call("Loop start. Say 'loop' to loop, 'end' to end.") for _ in range(3)] + [call("Loop ended.")]

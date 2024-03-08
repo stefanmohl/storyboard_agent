@@ -67,7 +67,7 @@ def main():
     initial_state = []
     initial_snippet = snippet0
 
-    final_state, end_snippet = execute_storyboard(initial_state, initial_snippet)
+    final_state = execute_storyboard(initial_state, initial_snippet)
 
     if find_snippet(snippet5, final_state) or not find_snippet(snippet2, final_state):
         if find_snippet(snippet5, final_state):
@@ -75,7 +75,7 @@ def main():
         if find_snippet(snippet2, final_state):
             print(f"You found treasure in stages {find_snippet(snippet2, final_state)}")
         final_state = final_state[:-1] # lets undo that undortunate end
-        final_final_state, end_snippet = execute_storyboard(final_state, snippet8)
+        final_final_state = execute_storyboard(final_state, snippet8)
     
 if __name__ == '__main__':
     main()
