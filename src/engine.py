@@ -13,8 +13,11 @@ def create_context_record():
                 'texts': [],
                 'result': ""
             }
+
+def colour_printer(output):
+    print(f"\u001b[31m{output}\u001b[0m")
                             
-def execute_storyboard(story_context, current_snippet, get_input=get_user_input, send_output=print):
+def execute_storyboard(story_context, current_snippet, get_input=get_user_input, send_output=colour_printer):
     current_record = create_context_record()
     while current_snippet is not None: 
         output, next_action, decision_function = current_snippet(story_context)
