@@ -1,6 +1,6 @@
-from engine import execute_storyboard
-
-your_name = ""
+from engine import (execute_storyboard, find_snippet)
+from ollama_connector import (storyboard2ollama, generate)
+your_name = "" # Global variable for now, we should add this to event_sourcing
 
 def snippet1(story_state):
     def decide_next(input):
@@ -23,7 +23,7 @@ def snippet3(story_state):
     return ("You encounter a dragon. Fight or flee?", 'input', choose)
 
 def snippet4(story_state):
-    return ("You need to pick left or right.", snippet1, None)
+    return ("You need to select one of the two: left or right.", snippet1, None)
 
 def snippet5(story_state):
     return ("You are out of your mind! You try to fight the dragon. You died.", 'end', None)
@@ -38,16 +38,15 @@ def snippet7(story_state):
 
 def snippet0(story_state):
     def record_name(input):
+        if len(input.split()) > 2:
+            return snippet_bad_name
         global your_name
         your_name = " " + input
         return snippet1
     return ("Please enter your name.", 'input', record_name)
 
-def find_snippet(test_snippet, story_state):
-    locations = [i for i, snippet_list in enumerate(story_state)
-        for snippet in snippet_list['functions']
-        if snippet == test_snippet ]
-    return locations
+def snippet_bad_name(story_state):
+    return ("You need to say only your name, one or two words only. You can make up what you like.", snippet0, None)
 
 def snippet8(story_state):
     def do_continue(input):
@@ -67,7 +66,7 @@ def main():
     initial_state = []
     initial_snippet = snippet0
 
-    final_state = execute_storyboard(initial_state, initial_snippet)
+    final_state = execute_storyboard(initial_state, initial_snippet, generate)
 
     if find_snippet(snippet5, final_state) or not find_snippet(snippet2, final_state):
         if find_snippet(snippet5, final_state):
@@ -75,7 +74,8 @@ def main():
         if find_snippet(snippet2, final_state):
             print(f"You found treasure in stages {find_snippet(snippet2, final_state)}")
         final_state = final_state[:-1] # lets undo that undortunate end
-        final_final_state = execute_storyboard(final_state, snippet8)
+        final_final_state = execute_storyboard(final_state, snippet8, generate)
     
+    print(storyboard2ollama(final_state))
 if __name__ == '__main__':
     main()
