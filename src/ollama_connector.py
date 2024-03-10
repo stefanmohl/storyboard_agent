@@ -8,6 +8,7 @@ baseurl="http://localhost:11434/api/"
 # https://github.com/ollama/ollama/blob/main/docs/modelfile.md
 model_settings={
     "model": "mistral:7b",
+    "system": "You are part of a question and answering system. You will respond to messages, sometimes machine generated, so you will follow the instructions carefully and with perfect precision. Each time you respond, you will carefully look through the whole history of the conversation to see if it is making progress. If you find that your responses are not helping the system make progress, you will give an analysis of why the system is stuck. Later on, you will be given that analysis back and you will find a way to progress based on that analysis.",
     "options": {
 #        "mirostat": 1,
 #        "mirostat_eta": 0.6,
