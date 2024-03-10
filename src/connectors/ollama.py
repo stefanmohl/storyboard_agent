@@ -8,7 +8,6 @@ baseurl="http://localhost:11434/api/"
 # https://github.com/ollama/ollama/blob/main/docs/modelfile.md
 model_settings={
     "model": "mistral:7b",
-    "system": "You are part of a question and answering system. You will respond to messages, sometimes machine generated, so you will follow the instructions carefully and with perfect precision. Each time you respond, you will carefully look through the whole history of the conversation to see if it is making progress. If you find that your responses are not helping the system make progress, you will give an analysis of why the system is stuck. Later on, you will be given that analysis back and you will find a way to progress based on that analysis.",
     "options": {
 #        "mirostat": 1,
 #        "mirostat_eta": 0.6,
@@ -56,26 +55,27 @@ test_messages = {
     ]
 }
 
-{
-    'snippets': [],
-    'texts': [],
-    'result': ""
-}
+def set_system_message(message):
+    model_settings["system"] = message
 
-def storyboard2ollama(storyboard):
+def storyboard2llm(storyboard):
     messages = []
     for exchange in storyboard:
-        messages += [{'role': 'user', 'content': '\n'.join(exchange['texts'])}] if exchange['texts'] else ""
-        messages += [{'role': 'assistant', 'content': exchange['result']}] if exchange['result'] else ""
+        messages += ([{'role': 'user', 'content': '\n'.join(exchange['texts'])}]
+                        if exchange['texts'] else "")
+        messages += ([{'role': 'assistant', 'content': exchange['result']}]
+                        if exchange['result'] else "")
     return {'messages': messages}
 
 def generate(messages):
-    ollama_messages = storyboard2ollama(messages)
+    ollama_messages = storyboard2llm(messages)
     request_params= { **model_settings, **ollama_messages }
     full_text = ""
-    #print(f"{messages}")
-    #print(f"{ollama_messages}")
-    with requests.post(url, headers={'Content-Type': 'application/json'}, data=json.dumps(request_params), stream=True) as response:
+    with requests.post(url, 
+                       headers={'Content-Type': 'application/json'},
+                       data=json.dumps(request_params),
+                       stream=True
+                      ) as response:
         for line in response.iter_lines():
             if line:  # filter out keep-alive newlines
                 token = json.loads(line.decode('utf-8'))['message']['content']
@@ -83,8 +83,7 @@ def generate(messages):
                 sys.stdout.flush()
                 full_text += token
     print()
-    #print(f'response is: {len(full_text)}:"{full_text}"')
     return full_text
 
 if __name__ == '__main__':
-    print(generate(test_messages))
+    generate(test_messages)
