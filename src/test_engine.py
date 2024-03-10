@@ -15,7 +15,7 @@ class TestExecuteStoryboardComplex(unittest.TestCase):
             return ("Path B chosen", 'end', None)
 
         # Correcting the mock setup and assertions
-        get_input_mock = lambda: 'A'
+        get_input_mock = lambda x: 'A'
         send_output_mock = MagicMock()
 
         story_state = []
@@ -33,7 +33,7 @@ class TestExecuteStoryboardComplex(unittest.TestCase):
             story_state.append("Accumulated")  # This appends directly to story_state
             return ("End", 'end', None)
 
-        get_input_mock = lambda: 'yes'
+        get_input_mock = lambda x: 'yes'
         send_output_mock = MagicMock()
 
         story_state = []
@@ -147,7 +147,7 @@ class TestExecuteStoryboardComplex(unittest.TestCase):
             return ("Option B chosen.", 'end', None)
 
         # First, test choosing option 'A'
-        get_input_mock_a = lambda: 'A'
+        get_input_mock_a = lambda x: 'A'
         send_output_mock_a = MagicMock()
 
         story_state_a = []
@@ -156,7 +156,7 @@ class TestExecuteStoryboardComplex(unittest.TestCase):
         send_output_mock_a.assert_has_calls([call("Choose 'A' or 'B':"), call("Option A chosen.")])
 
         # Then, test choosing option 'B'
-        get_input_mock_b = lambda: 'B'
+        get_input_mock_b = lambda x: 'B'
         send_output_mock_b = MagicMock()
 
         story_state_b = []
